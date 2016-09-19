@@ -1,6 +1,8 @@
 package com.ws.process;
 
 
+import com.ws.model.*;
+import com.ws.save.SaveFile;
 import com.ws.util.ImageDownloadUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
@@ -30,7 +32,7 @@ public class SDBSPicPageProcessor implements PageProcessor {
             .addCookie("__utmc","200088940")
             .addCookie("__utmz","200088940.1474173549.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)");
 
-    private static Logger logger = Logger.getLogger(SDBSPicPageProcessor.class);
+
 
     @Override
     public void process(Page page) {
@@ -38,21 +40,22 @@ public class SDBSPicPageProcessor implements PageProcessor {
 
         String url = page.getUrl().toString();
 
+        SaveFile saveFile = new SaveFile(page);
+
         //定义抽取信息，并保存信息
-        if(url.contains("imgdir=ms&amp")){
-
+        if(url.contains("imgdir=ms")){
+            saveFile.saveMs("a");
         }else if(url.contains("imgdir=cds")){
-
+            saveFile.saveCnmr("b");
         }else if(url.contains("imgdir=hsp")){
-
+            saveFile.saveHnmr("c");
         }else if(url.contains("imgdir=ir")){
-
+            saveFile.saveIR("d");
         }else if(url.contains("imgdir=rm")){
-
+            saveFile.saveRAMAN("e");
         }else if(url.contains("mgdir=esr")){
-
+            saveFile.saveESR("f");
         }
-        processPicture(page,"as");
         System.out.println("=============爬虫工作结束=============");
         //因为没有考虑下一页，这里不想着添加下一页
     }
@@ -61,88 +64,5 @@ public class SDBSPicPageProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
-    private void processPicture(Page page,String fileName){
-        //获取所有满足匹配的url,已经证明获取的不是空\
-//        processPictureAndText(page);
-        processText(page);
-        processSecondPicture(page,fileName);
-//        System.out.println(page.getHtml().toString());
-        List<String> url = page.getHtml().xpath("//*html/body").all();
-//        System.out.println(url.size());
-        for(String picUrl:url) {
-            //从每个url中获取图片路径
-            String picU = xpath("//*img").selectElement(picUrl).attr("src");
-            picU = "http://sdbs.db.aist.go.jp/sdbs/cgi-bin/" + picU.substring(2, picU.length());
-            logger.info("图片url:" + picU);
-            System.out.println("图片："+picU);
-            //下载路径
-            String downloadDir = "/home/laowang/pic";
-            //文件保存路径
-            String filePath = downloadDir + File.separator + "laowang";
-            //文件保存类型
-            String picType = "cgi";
-            System.out.println(filePath);
-            try {
-                //调用文件下载方法
-                ImageDownloadUtils.downLoadImage(picU, filePath, fileName, picType);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
-
-    //获取ms和esr的文字部分数据
-    private void processPictureAndText(Page page){
-        try{
-            List<String> listUpText = page.getHtml().xpath("//*html/body/pre[1]/text()").all();
-
-            List<String> listDownText = page.getHtml().xpath("//*html/body/pre[2]/text()").all();
-
-            System.out.println("text1："+listUpText.get(0));
-            System.out.println("text2："+listDownText.get(0));
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("*********不匹配********");
-        }
-
-    }
-
-    //获取CNMR和HNMR的第二部分图片
-    private void processSecondPicture(Page page,String fileName){
-        List<String> listPicture = page.getHtml().xpath("//*html/body/table[2]/tbody/tr[1]/td").all();
-        String picU = xpath("//*img").selectElement(listPicture.get(0)).attr("src");
-        picU = "http://sdbs.db.aist.go.jp/sdbs/cgi-bin/" + picU.substring(2, picU.length());
-        System.out.println("第二部分图片："+picU);
-        String downloadDir = "/home/laowang/pic";
-        //文件保存路径
-        String filePath = downloadDir + File.separator + "laowang";
-        //文件保存类型
-        String picType = "cgi";
-        System.out.println(filePath);
-        try {
-            //调用文件下载方法
-            ImageDownloadUtils.downLoadImage(picU, filePath, fileName, picType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //获取cnmr和hnmr内容
-    private void processText(Page page){
-        List<String> listTop_No = page.getHtml().xpath("//*html/body/table[1]/tbody/tr[1]/td[1]/spacer/spacer/text()").all();
-        List<String> listTop_Mhz = page.getHtml().xpath("//*html/body/table[1]/tbody/tr[1]/td[2]/text()").all();
-        List<String> listTop_gMl = page.getHtml().xpath("//*html/body/table[1]/tbody/tr[2]/td[2]/text()").all();
-        List<String> listTop_num = page.getHtml().xpath("//*html/body/table[1]/tbody/tr[2]/td[2]/sub/text()").all();//需要判断是否为空
-        List<String> listUnder_title = page.getHtml().xpath("//*html/body/table[2]/tbody/tr[2]/td/pre/b/text()").all();
-        List<String> listUnder_text = page.getHtml().xpath("//*html/body/table[2]/tbody/tr[2]/td/pre/text()").all();//这条会匹配两条数据，第一条为空
-        System.out.println(listTop_No.get(0));
-        System.out.println(listTop_Mhz.get(0));
-        if(listTop_num.size()==0)
-            System.out.println(listTop_gMl.get(0));
-        else
-            System.out.println(listTop_gMl.get(0).trim()+listTop_num.get(0).trim());
-        System.out.println(listUnder_title.get(0));
-        System.out.println(listUnder_text.get(0));
-    }
 }
