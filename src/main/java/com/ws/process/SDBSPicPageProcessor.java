@@ -35,8 +35,24 @@ public class SDBSPicPageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         System.out.println("=============爬虫开始工作=============");
+
+        String url = page.getUrl().toString();
+
         //定义抽取信息，并保存信息
-        processPicture(page);
+        if(url.contains("imgdir=ms&amp")){
+
+        }else if(url.contains("imgdir=cds")){
+
+        }else if(url.contains("imgdir=hsp")){
+
+        }else if(url.contains("imgdir=ir")){
+
+        }else if(url.contains("imgdir=rm")){
+
+        }else if(url.contains("mgdir=esr")){
+
+        }
+        processPicture(page,"as");
         System.out.println("=============爬虫工作结束=============");
         //因为没有考虑下一页，这里不想着添加下一页
     }
@@ -45,14 +61,13 @@ public class SDBSPicPageProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
-    private void processPicture(Page page){
+    private void processPicture(Page page,String fileName){
         //获取所有满足匹配的url,已经证明获取的不是空\
 //        processPictureAndText(page);
         processText(page);
-        processSecondPicture(page);
+        processSecondPicture(page,fileName);
 //        System.out.println(page.getHtml().toString());
         List<String> url = page.getHtml().xpath("//*html/body").all();
-        int i=13;
 //        System.out.println(url.size());
         for(String picUrl:url) {
             //从每个url中获取图片路径
@@ -69,11 +84,10 @@ public class SDBSPicPageProcessor implements PageProcessor {
             System.out.println(filePath);
             try {
                 //调用文件下载方法
-                ImageDownloadUtils.downLoadImage(picU, filePath, String.valueOf(i), picType);
+                ImageDownloadUtils.downLoadImage(picU, filePath, fileName, picType);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            i++;
         }
     }
 
@@ -95,7 +109,7 @@ public class SDBSPicPageProcessor implements PageProcessor {
     }
 
     //获取CNMR和HNMR的第二部分图片
-    private void processSecondPicture(Page page){
+    private void processSecondPicture(Page page,String fileName){
         List<String> listPicture = page.getHtml().xpath("//*html/body/table[2]/tbody/tr[1]/td").all();
         String picU = xpath("//*img").selectElement(listPicture.get(0)).attr("src");
         picU = "http://sdbs.db.aist.go.jp/sdbs/cgi-bin/" + picU.substring(2, picU.length());
@@ -106,10 +120,9 @@ public class SDBSPicPageProcessor implements PageProcessor {
         //文件保存类型
         String picType = "cgi";
         System.out.println(filePath);
-        int i=14;
         try {
             //调用文件下载方法
-            ImageDownloadUtils.downLoadImage(picU, filePath, String.valueOf(i), picType);
+            ImageDownloadUtils.downLoadImage(picU, filePath, fileName, picType);
         } catch (Exception e) {
             e.printStackTrace();
         }
