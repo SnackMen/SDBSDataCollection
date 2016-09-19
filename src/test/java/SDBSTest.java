@@ -9,8 +9,8 @@ public class SDBSTest {
     public static void main(String args[]){
         PropertyConfigurator.configure(ClassLoader.getSystemResourceAsStream("log4j.properties"));
         Spider.create(new SDBSPicPageProcessor())
-                .addUrl("http://sdbs.db.aist.go.jp/sdbs/cgi-bin/img_disp.cgi?disptype=disp3&amp;imgdir=cds&amp;fname=CDS07852&amp;sdbsno=1")
-                .thread(1)
+                .addUrl("http://sdbs.db.aist.go.jp/sdbs/cgi-bin/img_disp.cgi?disptype=disp1&amp;imgdir=esr&amp;fname=ESR0981&amp;sdbsno=96")
+                .thread(3)
                 .run();
     }
 }

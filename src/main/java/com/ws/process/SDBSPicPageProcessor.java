@@ -1,18 +1,11 @@
 package com.ws.process;
 
 
-import com.ws.model.*;
 import com.ws.save.SaveFile;
-import com.ws.util.ImageDownloadUtils;
-import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import java.io.File;
-import java.util.List;
-
-import static us.codecraft.webmagic.selector.Selectors.xpath;
 
 /**
  * Created by laowang on 16-9-18.
@@ -21,6 +14,8 @@ public class SDBSPicPageProcessor implements PageProcessor {
     private Site site = Site.me().setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/52.0.2743.116 Chrome/52.0.2743.116 Safari/537.36")
             .setSleepTime(1000)
             .setRetryTimes(3)
+            .setCharset("utf-8")
+            .setCycleRetryTimes(10)
             .addCookie("SDBS_ENTRANCE_CK","ZHxo9OjZIFY")
             .addCookie("SDBS_IMG","d1xPwybPXNc")
             .addCookie("SDBS_CK","gdLDgdBhLsc")
@@ -57,7 +52,6 @@ public class SDBSPicPageProcessor implements PageProcessor {
             saveFile.saveESR("f");
         }
         System.out.println("=============爬虫工作结束=============");
-        //因为没有考虑下一页，这里不想着添加下一页
     }
 
     @Override

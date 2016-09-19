@@ -1,5 +1,7 @@
 package com.ws.model;
 
+import com.ws.util.JsonUtils;
+
 /**
  * Created by laowang on 16-9-18.
  */
@@ -21,5 +23,9 @@ public class IR {
 
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
+    }
+
+    public String toJson(){
+        return JsonUtils.toJson(this);
     }
 }

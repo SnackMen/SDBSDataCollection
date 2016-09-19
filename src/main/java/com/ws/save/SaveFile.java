@@ -1,5 +1,7 @@
 package com.ws.save;
 
+import com.mongodb.*;
+import com.mongodb.util.JSON;
 import com.ws.file.GetFile;
 import com.ws.model.*;
 import us.codecraft.webmagic.Page;
@@ -16,41 +18,134 @@ public class SaveFile {
 
     private GetFile getFile=null;
 
+    private MongoClient mongoClient = new MongoClient();
+    private DB db = mongoClient.getDB("mymongo");
+    private DBCollection collection = null;
+
     //存储ms的所有信息
     public synchronized void saveMs( String fileName){
         getFile = new GetFile(page);
-        getFile.processPictureAndText(page,new MS());//文字采集
-        getFile.processPicture(page,fileName);//图片采集
+        getFile.processPictureAndText(new MS(),1);//文字采集
+        try {
+            collection = db.getCollection("ms_table");
+            getFile.processPicture(fileName);//图片采集
+            BasicDBObject object = new BasicDBObject();
+            object.put("picUrl",fileName);
+            BasicDBObject query = new BasicDBObject();
+            query.put("sdbsno",1);
+            BasicDBObject updateObject = new BasicDBObject();
+            updateObject.put("$set",object);
+            collection.update(query,updateObject);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if (mongoClient!=null)
+                mongoClient.close();
+        }
     }
 
     //存储cnmr所有信息
     public synchronized void saveCnmr( String fileName){
         getFile = new GetFile(page);
-        getFile.processText(page,new CNMR());//文字采集
-        getFile.processPicture(page,fileName);//第一张图片采集
-        getFile.processSecondPicture(page,fileName+"1");//第二张图片采集
+        getFile.processText(new CNMR(),2);//文字采集
+        try {
+            collection = db.getCollection("cnmr_table");
+            getFile.processPicture(fileName);
+            getFile.processSecondPicture(fileName+"1");
+            BasicDBObject object = new BasicDBObject();
+            object.put("firstPicUrl",fileName);
+            object.put("secondPicUrl",fileName+"1");
+            BasicDBObject query = new BasicDBObject();
+            query.put("sdbsno",2);
+            BasicDBObject updateObject = new BasicDBObject();
+            updateObject.put("$set",object);
+            collection.update(query,updateObject);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(mongoClient!=null)
+                mongoClient.close();
+        }
     }
 
     public synchronized void saveHnmr(String fileName){
         getFile = new GetFile(page);
-        getFile.processText(page,new HNMR());//文字采集
-        getFile.processPicture(page,fileName);//第一张图片采集
-        getFile.processSecondPicture(page,fileName+"1");//第二张图片采集
+        getFile.processText(new HNMR(),3);//文字采集
+        try {
+            collection = db.getCollection("hnmr_table");
+            getFile.processPicture(fileName);//第一张图片采集
+            getFile.processSecondPicture(fileName+"1");//第二张图片采集
+            BasicDBObject object = new BasicDBObject();
+            object.put("firstPicUrl",fileName);
+            object.put("secondPicUrl",fileName+"1");
+            BasicDBObject query = new BasicDBObject();
+            query.put("sdbsno",3);
+            BasicDBObject updateObject = new BasicDBObject();
+            updateObject.put("$set",object);
+            collection.update(query,updateObject);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(mongoClient!=null)
+                mongoClient.close();
+        }
     }
 
     public synchronized void saveIR(String fileName){
         getFile = new GetFile(page);
-        getFile.processPicture(page,fileName);//图片采集
+        try {
+            collection = db.getCollection("ir_table");
+//            getFile.processPicture(fileName);//第一张图片采集
+            getFile.getPicture(fileName);
+            IR ir = new IR();
+            ir.setSdbsno(4);
+            ir.setPicUrl(fileName);
+            DBObject object = (BasicDBObject)JSON.parse(ir.toJson());
+            collection.insert(object);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(mongoClient!=null)
+                mongoClient.close();
+        }
     }
 
     public synchronized  void saveRAMAN(String fileName){
         getFile = new GetFile(page);
-        getFile.processPicture(page,fileName);//图片采集
+        try {
+            collection = db.getCollection("raman_table");
+            getFile.getPicture(fileName);//第一张图片采集
+            RAMAN raman = new RAMAN();
+            raman.setSdbsno(5);
+            raman.setPicUrl(fileName);
+            DBObject object = (BasicDBObject)JSON.parse(raman.toJson());
+            collection.insert(object);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(mongoClient!=null)
+                mongoClient.close();
+        }
     }
 
     public synchronized void saveESR(String fileName){
         getFile = new GetFile(page);
-        getFile.processText(page,new ESR());//文字采集
-        getFile.processPicture(page,fileName);//图片采集
+        getFile.processPictureAndText(new ESR(),6);//文字采集
+        try {
+            collection = db.getCollection("esr_table");
+            getFile.processPicture(fileName);//图片采集
+            BasicDBObject object = new BasicDBObject();
+            object.put("picUrl",fileName);
+            BasicDBObject query = new BasicDBObject();
+            query.put("sdbsno",6);
+            BasicDBObject updateObject = new BasicDBObject();
+            updateObject.put("$set",object);
+            collection.update(query,updateObject);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if (mongoClient!=null)
+                mongoClient.close();
+        }
     }
 }

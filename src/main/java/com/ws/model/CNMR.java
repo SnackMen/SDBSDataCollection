@@ -1,5 +1,7 @@
 package com.ws.model;
 
+import com.ws.util.JsonUtils;
+
 /**
  * Created by laowang on 16-9-18.
  */
@@ -75,5 +77,9 @@ public class CNMR {
 
     public void setUnder_Text(String under_Text) {
         this.under_Text = under_Text;
+    }
+
+    public String toJson(){
+        return JsonUtils.toJson(this);
     }
 }
