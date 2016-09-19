@@ -54,7 +54,7 @@ public class SDBSTest {
 
                     Spider.create(new SDBSPicPageProcessor())
                             .addUrl(aStringList)
-                            .thread(3)
+                            .thread(4)
                             .start();
 
                 }

@@ -40,22 +40,22 @@ public class SDBSPicPageProcessor implements PageProcessor {
         //定义抽取信息，并保存信息
         if(url.contains("imgdir=ms")){
             String []strngUrls = url.split("sdbsno=");
-            saveFile.saveMs(strngUrls[1]+"_ms",Integer.valueOf(strngUrls[1]));
+            saveFile.saveMs("ms/"+strngUrls[1]+"_ms",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=cds")){
             String []strngUrls = url.split("sdbsno=");
-            saveFile.saveCnmr(strngUrls[1]+"_cnmr",Integer.valueOf(strngUrls[1]));
+            saveFile.saveCnmr("cnmr/"+strngUrls[1]+"_cnmr",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=hsp")){
             String []strngUrls = url.split("sdbsno=");
-            saveFile.saveHnmr(strngUrls[1]+"_hnmr",Integer.valueOf(strngUrls[1]));
+            saveFile.saveHnmr("hnmr/"+strngUrls[1]+"_hnmr",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=ir")){
             String []strngUrls = url.split("sdbsno=");
-            saveFile.saveIR(strngUrls[1]+"_ir",Integer.valueOf(strngUrls[1]));
+            saveFile.saveIR("ir/"+strngUrls[1]+"_ir",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=rm")){
             String []strngUrls = url.split("sdbsno=");
-            saveFile.saveRAMAN(strngUrls[1]+"_raman",Integer.valueOf(strngUrls[1]));
+            saveFile.saveRAMAN("raman/"+strngUrls[1]+"_raman",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("mgdir=esr")){
             String []strngUrls = url.split("sdbsno=");
-            saveFile.saveESR(strngUrls[1]+"_esr",Integer.valueOf(strngUrls[1]));
+            saveFile.saveESR("esr/"+strngUrls[1]+"_esr",Integer.valueOf(strngUrls[1]));
         }
         System.out.println("=============爬虫工作结束=============");
     }
