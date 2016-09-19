@@ -23,16 +23,16 @@ public class SaveFile {
     private DBCollection collection = null;
 
     //存储ms的所有信息
-    public synchronized void saveMs( String fileName){
+    public synchronized void saveMs( String fileName,int sdbsno){
         getFile = new GetFile(page);
-        getFile.processPictureAndText(new MS(),1);//文字采集
+        getFile.processPictureAndText(new MS(),sdbsno);//文字采集
         try {
             collection = db.getCollection("ms_table");
             getFile.processPicture(fileName);//图片采集
             BasicDBObject object = new BasicDBObject();
             object.put("picUrl",fileName);
             BasicDBObject query = new BasicDBObject();
-            query.put("sdbsno",1);
+            query.put("sdbsno",sdbsno);
             BasicDBObject updateObject = new BasicDBObject();
             updateObject.put("$set",object);
             collection.update(query,updateObject);
@@ -45,9 +45,9 @@ public class SaveFile {
     }
 
     //存储cnmr所有信息
-    public synchronized void saveCnmr( String fileName){
+    public synchronized void saveCnmr( String fileName,int sdbsno){
         getFile = new GetFile(page);
-        getFile.processText(new CNMR(),2);//文字采集
+        getFile.processText(new CNMR(),sdbsno);//文字采集
         try {
             collection = db.getCollection("cnmr_table");
             getFile.processPicture(fileName);
@@ -56,7 +56,7 @@ public class SaveFile {
             object.put("firstPicUrl",fileName);
             object.put("secondPicUrl",fileName+"1");
             BasicDBObject query = new BasicDBObject();
-            query.put("sdbsno",2);
+            query.put("sdbsno",sdbsno);
             BasicDBObject updateObject = new BasicDBObject();
             updateObject.put("$set",object);
             collection.update(query,updateObject);
@@ -68,9 +68,9 @@ public class SaveFile {
         }
     }
 
-    public synchronized void saveHnmr(String fileName){
+    public synchronized void saveHnmr(String fileName,int sdbsno){
         getFile = new GetFile(page);
-        getFile.processText(new HNMR(),3);//文字采集
+        getFile.processText(new HNMR(),sdbsno);//文字采集
         try {
             collection = db.getCollection("hnmr_table");
             getFile.processPicture(fileName);//第一张图片采集
@@ -79,7 +79,7 @@ public class SaveFile {
             object.put("firstPicUrl",fileName);
             object.put("secondPicUrl",fileName+"1");
             BasicDBObject query = new BasicDBObject();
-            query.put("sdbsno",3);
+            query.put("sdbsno",sdbsno);
             BasicDBObject updateObject = new BasicDBObject();
             updateObject.put("$set",object);
             collection.update(query,updateObject);
@@ -91,14 +91,14 @@ public class SaveFile {
         }
     }
 
-    public synchronized void saveIR(String fileName){
+    public synchronized void saveIR(String fileName,int sdbsno){
         getFile = new GetFile(page);
         try {
             collection = db.getCollection("ir_table");
 //            getFile.processPicture(fileName);//第一张图片采集
             getFile.getPicture(fileName);
             IR ir = new IR();
-            ir.setSdbsno(4);
+            ir.setSdbsno(sdbsno);
             ir.setPicUrl(fileName);
             DBObject object = (BasicDBObject)JSON.parse(ir.toJson());
             collection.insert(object);
@@ -110,13 +110,13 @@ public class SaveFile {
         }
     }
 
-    public synchronized  void saveRAMAN(String fileName){
+    public synchronized  void saveRAMAN(String fileName,int sdbsno){
         getFile = new GetFile(page);
         try {
             collection = db.getCollection("raman_table");
             getFile.getPicture(fileName);//第一张图片采集
             RAMAN raman = new RAMAN();
-            raman.setSdbsno(5);
+            raman.setSdbsno(sdbsno);
             raman.setPicUrl(fileName);
             DBObject object = (BasicDBObject)JSON.parse(raman.toJson());
             collection.insert(object);
@@ -128,16 +128,16 @@ public class SaveFile {
         }
     }
 
-    public synchronized void saveESR(String fileName){
+    public synchronized void saveESR(String fileName,int sdbsno){
         getFile = new GetFile(page);
-        getFile.processPictureAndText(new ESR(),6);//文字采集
+        getFile.processPictureAndText(new ESR(),sdbsno);//文字采集
         try {
             collection = db.getCollection("esr_table");
             getFile.processPicture(fileName);//图片采集
             BasicDBObject object = new BasicDBObject();
             object.put("picUrl",fileName);
             BasicDBObject query = new BasicDBObject();
-            query.put("sdbsno",6);
+            query.put("sdbsno",sdbsno);
             BasicDBObject updateObject = new BasicDBObject();
             updateObject.put("$set",object);
             collection.update(query,updateObject);

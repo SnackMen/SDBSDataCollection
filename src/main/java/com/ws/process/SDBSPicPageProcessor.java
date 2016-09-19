@@ -35,21 +35,27 @@ public class SDBSPicPageProcessor implements PageProcessor {
 
         String url = page.getUrl().toString();
 
-        SaveFile saveFile = new SaveFile(page);
 
+        SaveFile saveFile = new SaveFile(page);
         //定义抽取信息，并保存信息
         if(url.contains("imgdir=ms")){
-            saveFile.saveMs("a");
+            String []strngUrls = url.split("sdbsno=");
+            saveFile.saveMs(strngUrls[1]+"_ms",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=cds")){
-            saveFile.saveCnmr("b");
+            String []strngUrls = url.split("sdbsno=");
+            saveFile.saveCnmr(strngUrls[1]+"_cnmr",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=hsp")){
-            saveFile.saveHnmr("c");
+            String []strngUrls = url.split("sdbsno=");
+            saveFile.saveHnmr(strngUrls[1]+"_hnmr",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=ir")){
-            saveFile.saveIR("d");
+            String []strngUrls = url.split("sdbsno=");
+            saveFile.saveIR(strngUrls[1]+"_ir",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("imgdir=rm")){
-            saveFile.saveRAMAN("e");
+            String []strngUrls = url.split("sdbsno=");
+            saveFile.saveRAMAN(strngUrls[1]+"_raman",Integer.valueOf(strngUrls[1]));
         }else if(url.contains("mgdir=esr")){
-            saveFile.saveESR("f");
+            String []strngUrls = url.split("sdbsno=");
+            saveFile.saveESR(strngUrls[1]+"_esr",Integer.valueOf(strngUrls[1]));
         }
         System.out.println("=============爬虫工作结束=============");
     }
@@ -58,5 +64,6 @@ public class SDBSPicPageProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
+
 
 }
