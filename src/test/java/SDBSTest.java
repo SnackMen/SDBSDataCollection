@@ -1,5 +1,4 @@
 import com.mongodb.*;
-import com.sun.xml.internal.bind.v2.TODO;
 import com.ws.process.SDBSPicPageProcessor;
 import org.apache.log4j.PropertyConfigurator;
 import us.codecraft.webmagic.Spider;
@@ -17,8 +16,10 @@ public class SDBSTest {
     private static DBCollection collection = null;
     private static List<String> stringList = null;
     public static void main(String args[]){
-        for(int i=1;i<=10;i++){
-
+//        int []nums = new int[]{365};
+        for(int i=53001;i<=54500;i++){
+//        for(int i : nums){
+//            collection = db.getCollection("raman_table");//测试
             collection  = db.getCollection("sdbs_collection");
             DBCursor object = collection.find(new BasicDBObject("sdbsno",i));
             if(object.size()>0){
@@ -34,18 +35,25 @@ public class SDBSTest {
                 String raman = map.get("raman").toString();
                 String esr = map.get("esr").toString();
 
-                if(!ms.equals("N"))
-                    stringList.add(ms);
-                if (!hnmr.equals("N"))
-                    stringList.add(hnmr);
-                if(!cnmr.equals("N"))
-                    stringList.add(cnmr);
+//                if(!ms.equals("N"))
+//                    stringList.add(ms);
+//                if (!hnmr.equals("N"))
+//                    stringList.add(hnmr);
+//                if(!cnmr.equals("N"))
+//                    stringList.add(cnmr);
                 if(!ir.equals("N"))
-                    stringList.add(ir);
-                if(!raman.equals("N"))
-                    stringList.add(raman);
-                if(!esr.equals("N"))
-                    stringList.add(esr);
+                    if(ir.contains("imgdir=ir2")){
+                        String []urls = ir.split("imgdir=ir2");
+                        ir = "http://sdbs.db.aist.go.jp/sdbs/cgi-bin/ir_disp.cgi?imgdir=ir2"+urls[1];
+                        stringList.add(ir);
+                    }else{
+                        System.out.println("ir");
+                    }
+
+//                if(!raman.equals("N"))
+//                    stringList.add(raman);
+//                if(!esr.equals("N"))
+//                    stringList.add(esr);
 
                 for (String aStringList : stringList) {
 //                    System.out.println(aStringList);
@@ -54,17 +62,17 @@ public class SDBSTest {
 
                     Spider.create(new SDBSPicPageProcessor())
                             .addUrl(aStringList)
-                            .thread(4)
-                            .start();
+                            .thread(3)
+                            .run();
 
                 }
+
 
 //                System.out.println("**************************");
                // System.out.println(dbObjectList.get(0).get("ms"));
 
-                //TODO 还需要考虑保存数据位置问题
             }
-
+//            System.out.println(i+":"+object.count());
         }
     }
 }

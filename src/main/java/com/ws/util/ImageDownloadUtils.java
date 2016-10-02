@@ -43,7 +43,7 @@ public class ImageDownloadUtils {
 //        httpget.setHeader("Accept-Language","zh-CN,zh;q=0.8");
 //        httpget.setHeader("Accept-Encoding","gzip, deflate, sdch");
 //        httpget.setHeader("Connection","keep-alive");
-        httpget.setHeader("Cookie","SDBS_ENTRANCE_CK=qs5yWNQDKmI; SDBS_CK=RJ0guEAUowQ; SDBS_IMG=mGD.aGRbG7U; __utmt_cloud=1; __utmt_aist=1; SDBS_LANG=eng; __utma=200088940.653950373.1474173549.1474173549.1474177148.2; __utmb=200088940.35.9.1474177188179; __utmc=200088940; __utmz=200088940.1474173549.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)");
+        httpget.setHeader("Cookie","SDBS_ENTRANCE_CK=Jb96qC306Mc; SDBS_CK=0JbgXEdZTos; SDBS_IMG=x/ae/QAPpno; __utma=200088940.1199044543.1473568841.1474203323.1474270090.280; __utmz=200088940.1473568841.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); SDBS_LANG=eng");
 //        httpget.setHeader("Host","sdbs.db.aist.go.jp");
 //        httpget.setHeader("Referer","http://sdbs.db.aist.go.jp/sdbs/cgi-bin/img_disp.cgi?disptype=disp1&amp;imgdir=ms&amp;fname=MSNW1671&amp;sdbsno=1");
 //        httpget.setHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/52.0.2743.116 Chrome/52.0.2743.116 Safari/537.36");
@@ -63,6 +63,7 @@ public class ImageDownloadUtils {
             fout.flush();
             fout.close();
         }catch (FileNotFoundException e){
+            logger.error("图片下载过程出错:"+url);
             e.printStackTrace();
         } finally {
 
